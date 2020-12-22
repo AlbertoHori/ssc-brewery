@@ -1,6 +1,7 @@
 package guru.sfg.brewery.web.controllers.api;
 
 import guru.sfg.brewery.web.controllers.BaseIT;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -58,5 +59,26 @@ public class BeerRestControllerIT extends BaseIT {
     void findBeerByUpc() throws Exception{
         mockMvc.perform(get("/api/v1/beerUpc/0631234200036"))
                 .andExpect(status().isOk());
+    }
+/*
+    @Test
+    @Ignore
+    void findBreweryWithCustomerRole() throws Exception{
+        mockMvc.perform(get("/api/v1/breweries/brewery")
+                .with(httpBasic("scott", "tiger")))
+                .andExpect(status().isOk());
+    }
+*/
+    @Test
+    void findBreweryWithUserRole() throws Exception{
+        mockMvc.perform(get("/api/v1/breweries/brewery")
+                .with(httpBasic("user", "password")))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void findBreweryWithNoAuth() throws Exception{
+        mockMvc.perform(get("/breweries/brewery"))
+                .andExpect(status().isUnauthorized());
     }
 }
